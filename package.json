@@ -1,0 +1,33 @@
+{
+  "name": "timesheet-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "gen:icons": "node scripts/gen-icons.mjs"
+  },
+  "dependencies": {
+    "@solidjs/router": "0.16.1",
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-dialog": "^2.7.1",
+    "@tauri-apps/plugin-fs": "^2.5.1",
+    "solid-js": "1.9.12",
+    "sql.js": "^1.11.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.3",
+    "@types/node": "^25.9.3",
+    "icojs": "^0.19.5",
+    "png-to-ico": "^3.0.1",
+    "sharp": "^0.35.1",
+    "typescript": "6.0.3",
+    "vite": "8.0.12",
+    "vite-plugin-solid": "2.11.12"
+  }
+}

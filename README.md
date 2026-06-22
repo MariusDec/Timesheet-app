@@ -1,1 +1,1 @@
-# Timesheet-app
+# timesheet-app

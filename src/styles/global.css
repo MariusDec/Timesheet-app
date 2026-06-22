@@ -1,0 +1,1592 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  caret-color: transparent;
+}
+
+input[type="text"],
+input:not([type]),
+textarea {
+  caret-color: currentColor;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--page-bg);
+  line-height: 1.5;
+}
+
+/* ===== Navigation ===== */
+.top-nav {
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  padding: 0 24px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.nav-links-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  color: var(--nav-link);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: var(--nav-text);
+  background: var(--nav-link-hover);
+}
+
+.nav-link.active {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
+/* ===== Theme Toggle Button ===== */
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  width: 40px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--nav-link-hover);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.theme-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+  padding: 24px 32px;
+  background: var(--page-bg);
+  min-height: calc(100vh - 55px);
+}
+
+/* ===== Page ===== */
+.page {
+  max-width: 1350px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page h1 {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.no-data {
+  color: var(--text-muted);
+  padding: 6px;
+  text-align: center;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.btn-secondary:hover {
+  background: var(--btn-secondary-hover);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
+
+/* ===== Week Navigator ===== */
+.week-navigator {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.nav-arrow-btn {
+  width: 40px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.nav-arrow-btn:first-child {
+  border-radius: 6px 0 0 6px;
+  border-right: none;
+}
+
+.nav-arrow-btn:last-child {
+  border-radius: 0 6px 6px 0;
+  border-left: none;
+}
+
+.nav-arrow-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.week-label-wrap {
+  position: relative;
+}
+
+.week-label-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  height: 36px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: 230px;
+  text-align: center;
+  align-content: center;
+  align-self: center;
+}
+
+.week-label-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--text-muted);
+}
+
+.week-cal-icon {
+  font-size: 14px;
+  line-height: 1;
+  width: 100%;
+}
+
+/* ===== Date Dropdown ===== */
+.date-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: -40px;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px var(--shadow-md);
+  z-index: 50;
+  min-width: 280px;
+}
+
+.date-dropdown-header {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+  background: var(--accent-light);
+}
+
+.dropdown-date-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.dropdown-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+/* ===== Calendar ===== */
+.calendar {
+  user-select: none;
+}
+
+.calendar-quick-selects {
+  display: flex;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.calendar-quick-btn {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text-primary);
+  height: 36px;
+}
+
+.calendar-quick-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+
+.calendar-quick-selects .calendar-quick-btn:not(:first-child):not(:last-child),
+.date-range-picker-quick-selects .calendar-quick-btn:not(:first-child):not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-top: none;
+  border-left: none;
+}
+
+.calendar-quick-selects .calendar-quick-btn:first-child,
+.date-range-picker-quick-selects .calendar-quick-btn:first-child {
+  border-radius: 8px 0 0 0;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-top: none;
+  border-left: none;
+}
+
+.calendar-quick-selects .calendar-quick-btn:last-child,
+.date-range-picker-quick-selects .calendar-quick-btn:last-child {
+  border-radius: 0 8px 0 0;
+  border-bottom: 1px solid var(--border-color);
+  border-right: none;
+  border-top: none;
+  border-left: none;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 16px;
+}
+
+.calendar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.calendar-nav-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  color: var(--text-primary);
+}
+
+.calendar-nav-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--text-muted);
+}
+
+.calendar-grid {
+  min-width: 260px;
+  padding: 0 16px 16px 16px;
+}
+
+.calendar-day-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+
+.calendar-day-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.calendar-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-radius: 4px;
+  transition: background-color 0.1s ease;
+}
+
+.calendar-week-hovered {
+  background: var(--calendar-week-hover);
+}
+
+.calendar-week-selected {
+  background: var(--calendar-week-selected);
+}
+
+.calendar-day {
+  width: 36px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 4px;
+  transition: all 0.1s;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.calendar-day:hover:not(:disabled):not(.no-hover-effect) {
+  background: var(--accent);
+  color: white;
+}
+
+.calendar-day:disabled {
+  cursor: default;
+}
+
+.calendar-day-empty {
+  visibility: hidden;
+}
+
+.calendar-day-today {
+  font-weight: 700;
+  color: var(--calendar-today);
+  position: relative;
+}
+
+.calendar-day-today::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--calendar-today);
+}
+
+.calendar-day-weekend {
+  color: var(--text-muted);
+}
+
+.calendar-day-in-selected {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ===== Timesheet Table ===== */
+.timesheet-table-wrapper {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px var(--shadow);
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.timesheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.timesheet-table thead th {
+  background: var(--table-header-bg);
+  padding: 10px 8px;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--table-header-text);
+  border-bottom: 1px solid var(--table-border);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.timesheet-table thead th:first-child {
+  text-align: left;
+  padding-left: 16px;
+}
+
+.timesheet-table tbody td {
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+  text-align: center;
+}
+
+.timesheet-table tbody td:first-child {
+  text-align: left;
+  padding-left: 16px;
+}
+
+.timesheet-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== Table Footer Totals ===== */
+.ts-footer {
+  border-top: 1px solid var(--table-border);
+}
+
+.ts-footer td {
+  padding: 10px 4px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--table-header-bg);
+}
+
+.ts-footer td:first-child {
+  text-align: left;
+  padding-left: 16px;
+}
+
+/* Column widths */
+.col-task {
+  width: 260px;
+  min-width: 260px;
+}
+
+.col-day {
+  width: 90px;
+  min-width: 90px;
+}
+
+.col-day-weekend {
+  background: var(--table-weekend-bg) !important;;
+}
+
+.col-day-today {
+  background: var(--table-today-bg) !important;
+}
+
+.col-day-holiday {
+  background: var(--table-holiday-bg) !important;
+}
+
+.col-day-weekend.col-day-today {
+  background: var(--table-today-bg);
+}
+
+.col-day-holiday.col-day-today {
+  background: var(--table-today-bg);
+}
+
+.col-total {
+  width: 80px;
+  min-width: 80px;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.col-action {
+  width: 40px;
+  min-width: 40px;
+}
+
+/* Day header */
+.day-header {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.day-header .day-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.day-header .day-date {
+  color: var(--text-muted);
+}
+
+/* Full column weekend/holiday highlighting for headers */
+.timesheet-table thead th.col-day-weekend {
+  background: var(--table-weekend-bg);
+  color: var(--text-muted);
+  font-style: italic;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.timesheet-table thead th.col-day-holiday {
+  background: var(--table-holiday-bg);
+  color: var(--text-muted);
+  font-style: italic;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+/* Today override for weekend/holiday headers */
+.timesheet-table thead th.col-day-weekend.col-day-today,
+.timesheet-table thead th.col-day-holiday.col-day-today {
+  background: var(--table-today-bg);
+}
+
+/* Task label */
+.task-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-project {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-variant: small-caps;
+}
+
+.task-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* ===== Time Input ===== */
+.time-input {
+  width: 85%;
+  padding: 6px 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: center;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  transition: all 0.15s;
+}
+
+.time-input::placeholder {
+  color: transparent;
+}
+
+.time-input:hover {
+  border-color: var(--text-muted);
+}
+
+.time-input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+}
+
+/* ===== Delete Button ===== */
+.delete-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.delete-btn:hover {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+/* ===== Select Project Row ===== */
+.select-project-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.select-project-row:hover {
+  background: var(--accent-light);
+}
+
+.select-project-icon {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ===== Add Row Button (legacy) ===== */
+.add-row-btn {
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: 2px dashed var(--border-color);
+  background: none;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-row-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.add-row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ===== Project Task Dropdown ===== */
+.project-task-dropdown {
+  position: fixed;
+  width: 480px;
+  min-height: 100px;
+  background: var(--dropdown-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px var(--shadow-lg);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+}
+
+.dropdown-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  border-bottom: 1px solid var(--dropdown-border);
+}
+
+.dropdown-search-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.dropdown-search {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.dropdown-search:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+}
+
+.dropdown-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--dropdown-border);
+}
+
+.dropdown-sort-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.dropdown-sort-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.dropdown-sort-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.dropdown-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 4px 0;
+}
+
+.dropdown-project {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.dropdown-project-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+  color: var(--text-primary);
+}
+
+.dropdown-project-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.dropdown-chevron {
+  font-size: 10px;
+  margin-right: 6px;
+  color: var(--text-muted);
+  width: 12px;
+}
+
+.dropdown-project-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-project-dot.expanded {
+  background: var(--accent);
+}
+
+.dropdown-project-name {
+  flex: 1;
+}
+
+.dropdown-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dropdown-count-chevron {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.dropdown-tasks {
+  padding: 0 0 4px 0;
+}
+
+.dropdown-task {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px 6px 34px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+  justify-content: space-between;
+}
+
+.dropdown-task:nth-child(2) {
+  border-top: 1px solid var(--border-color);
+}
+
+.dropdown-task:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-task:hover {
+  background: var(--accent-light);
+}
+
+.dropdown-star {
+  margin-right: 8px;
+  color: var(--warning);
+  font-size: 14px;
+  cursor: pointer;
+  width: 16px;
+  text-align: center;
+}
+
+.dropdown-star:hover {
+  color: var(--warning);
+}
+
+.dropdown-task-name {
+  flex: 1;
+}
+
+.dropdown-create-task {
+  width: 100%;
+  padding: 8px 16px 8px 34px;
+  border: none;
+  background: none;
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dropdown-create-task:hover {
+  background: var(--accent-light);
+}
+
+.create-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+/* ===== Dialog ===== */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 24px;
+  width: 360px;
+  box-shadow: 0 8px 40px var(--shadow-lg);
+}
+
+.dialog h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.dialog-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.dialog-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.dialog-input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+}
+
+.dialog-input-multiline {
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.dialog-error {
+  color: var(--danger);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ===== Context Menu ===== */
+.context-menu {
+  position: fixed;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px var(--shadow-md);
+  z-index: 200;
+  min-width: 140px;
+  padding: 4px 0;
+  overflow: hidden;
+}
+
+.context-menu-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background-color 0.1s;
+  user-select: none;
+}
+
+.context-menu-item:hover {
+  background: var(--dropdown-hover);
+}
+
+.context-menu-item-danger {
+  color: var(--danger);
+}
+
+.context-menu-item-danger:hover {
+  background: var(--danger-light);
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 8px;
+}
+
+/* ===== Confirm Dialog (inline for dropdown) ===== */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-dialog {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  padding: 24px;
+  width: 340px;
+  box-shadow: 0 8px 40px var(--shadow-lg);
+}
+
+.confirm-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.confirm-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ===== Export Page ===== */
+.export-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.export-controls {
+  margin-bottom: 20px;
+}
+
+.range-type-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.range-tab {
+  padding: 6px 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-primary);
+}
+
+.range-tab.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.range-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.quick-selects {
+  display: flex;
+  gap: 6px;
+}
+
+.quick-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-primary);
+}
+
+.quick-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.export-btn {
+  padding: 8px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.export-btn:hover {
+  background: var(--accent-hover);
+}
+
+.export-btn:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.export-table-wrap {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px var(--shadow);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.export-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.export-table thead th {
+  background: var(--table-header-bg);
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--table-header-text);
+  border-bottom: 2px solid var(--table-border);
+}
+
+.export-table tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.export-table tbody tr:hover {
+  background: var(--table-hover);
+}
+
+.export-total-row {
+  border-top: 2px solid var(--table-border);
+}
+
+.export-total-row td {
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--table-header-bg);
+}
+
+/* ===== Date Range Picker ===== */
+.date-range-picker {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.date-range-picker-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  height: 36px;
+  min-width: 230px;
+  justify-content: center;
+}
+
+.date-range-picker-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--text-muted);
+}
+
+.date-range-picker-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.date-range-picker-label {
+  font-size: 14px;
+}
+
+.date-range-picker-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.date-range-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: -40px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px var(--shadow-md);
+  z-index: 50;
+  padding-bottom: 12px;
+}
+
+/* Dual-month navigation header */
+.drp-nav-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px 4px;
+  margin-bottom: -34px;
+  position: relative;
+  z-index: 100;
+}
+
+.drp-nav-spacer {
+  flex: 1;
+}
+
+/* Side-by-side months container */
+.drp-months {
+  display: flex;
+  gap: 0;
+}
+
+.drp-month {
+  flex: 1;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.drp-month + .drp-month {
+  border-left: 1px solid var(--border-light);
+}
+
+.drp-month-title {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 4px 0 8px;
+  white-space: nowrap;
+}
+
+.date-range-picker-quick-selects {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 4px;
+}
+
+.date-range-picker-quick-selects .calendar-quick-btn {
+  padding: 8px 10px;
+  font-size: 11px;
+  height: 36px;
+}
+
+.date-range-picker-hint {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  padding: 6px 12px 2px;
+}
+
+/* Range highlight classes for date range picker */
+.drp-in-range {
+  background: var(--accent-light) !important;
+  color: var(--text-primary) !important;
+  font-weight: 400 !important;
+  border-radius: 0;
+}
+
+.drp-range-start,
+.drp-range-end {
+  background: var(--accent) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.drp-range-start {
+  border-radius: 8px 0 0 8px;
+}
+
+.drp-range-end {
+  border-radius: 0 8px 8px 0;
+}
+
+/* ===== Settings Page ===== */
+.settings-section {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px var(--shadow);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  max-width: 700px;
+}
+
+.settings-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+}
+
+.create-form {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.settings-input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+}
+
+.project-list {
+  list-style: none;
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.project-item:last-child {
+  border-bottom: none;
+}
+
+.project-item.archived {
+  opacity: 0.6;
+}
+
+.project-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.btn-primary:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Settings section title */
+.settings-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+.settings-help {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.settings-io-row {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-create-row {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-project-list {
+  list-style: none;
+}
+
+.settings-project-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+  gap: 8px;
+}
+
+.settings-project-row:last-child {
+  border-bottom: none;
+}
+
+.settings-project-row.archived {
+  opacity: 0.6;
+}
+
+.settings-dot {
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.settings-project-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.settings-action-btn {
+  flex-shrink: 0;
+}
+
+.settings-feedback {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.settings-section-title--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.settings-section-title--clickable:hover {
+  color: var(--accent);
+}
+
+.settings-chevron {
+  font-size: 8px;
+  color: var(--text-muted);
+  width: 12px;
+  flex-shrink: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+
+  .timesheet-table-wrapper {
+    font-size: 12px;
+  }
+
+  .project-task-dropdown {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .page-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
