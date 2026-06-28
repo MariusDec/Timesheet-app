@@ -12,15 +12,18 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
   const [search, setSearch] = createSignal('');
   const [projects, setProjects] = createSignal<Project[]>([]);
   const [tasks, setTasks] = createSignal<Task[]>([]);
+  const [searchedTasks, setSearchedTasks] = createSignal<Task[]>([]);
+  let searchTimer: ReturnType<typeof setTimeout> | undefined;
   const [expandedProjects, setExpandedProjects] = createSignal<Set<number>>(new Set());
   const [sortBy, setSortBy] = createSignal<'name' | 'lastUsed'>('lastUsed');
-  const [createDialog, setCreateDialog] = createSignal<Project | null>(null);
+  const [createDialog, setCreateDialog] = createSignal<{ project: Project; initialTaskName: string } | null>(null);
   const [contextMenuTask, setContextMenuTask] = createSignal<Task | null>(null);
   const [contextMenuPos, setContextMenuPos] = createSignal<{ x: number; y: number } | null>(null);
   const [confirmDeleteTask, setConfirmDeleteTask] = createSignal<Task | null>(null);
   const [editTask, setEditTask] = createSignal<Task | null>(null);
   const [editTaskName, setEditTaskName] = createSignal('');
   const [dropdownStyle, setDropdownStyle] = createSignal<Record<string, string>>({});
+  const [loading, setLoading] = createSignal(true);
   let dropdownRef: HTMLDivElement | undefined;
   let searchRef: HTMLInputElement | undefined;
 
@@ -62,7 +65,6 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
   async function loadProjects() {
     const projs = await db.projects.where('archived').equals(0).sortBy('name');
     setProjects(projs);
-    // Auto-expand if only one project exists
     if (projs.length === 1) {
       setExpandedProjects(new Set([projs[0].id]));
     }
@@ -75,22 +77,33 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
     } else {
       filtered = await db.tasks.toArray();
     }
-    // Filter out soft-deleted tasks
     const visible = filtered.filter(t => !t.deleted);
-
-    // Sort by current sortBy
     visible.sort((a, b) => {
       if (sortBy() === 'name') return a.name.localeCompare(b.name);
       return (b.lastUsedAt || 0) - (a.lastUsedAt || 0);
     });
-
     setTasks(visible);
   }
 
   createEffect(() => {
-    loadProjects();
-    loadTasks();
+    setLoading(true);
+    Promise.all([loadProjects(), loadTasks()]).then(() => setLoading(false));
   });
+
+  createEffect(() => {
+    const q = search().toLowerCase();
+    clearTimeout(searchTimer);
+    if (!q) {
+      setSearchedTasks([]);
+      return;
+    }
+    searchTimer = setTimeout(async () => {
+      const results = await db.tasks.where('name').contains(q).limit(50).toArray();
+      setSearchedTasks(results.filter(t => !t.deleted));
+    }, 300);
+  });
+
+  onCleanup(() => clearTimeout(searchTimer));
 
   createEffect(() => {
     searchRef?.focus();
@@ -143,8 +156,9 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
   }
 
   const handleTaskCreated = async (taskId: number) => {
-    const project = createDialog();
-    if (!project) return;
+    const dialog = createDialog();
+    if (!dialog) return;
+    const { project } = dialog;
     setCreateDialog(null);
     // Update lastUsedAt so the task sorts correctly before selecting
     await db.tasks.update(taskId, { lastUsedAt: Date.now() });
@@ -160,11 +174,13 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
   }
 
   function filteredTasks(projectId: number): Task[] {
-    let filtered = getTasksForProject(projectId);
-
     const searchLower = search().toLowerCase();
+
+    let filtered: Task[];
     if (searchLower) {
-      filtered = filtered.filter((t) => t.name.toLowerCase().includes(searchLower));
+      filtered = searchedTasks().filter((t) => t.projectId === projectId);
+    } else {
+      filtered = getTasksForProject(projectId);
     }
 
     // Favorites first
@@ -183,7 +199,17 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
       return (b.lastUsedAt || 0) - (a.lastUsedAt || 0);
     });
 
-    return [...favorites, ...nonFavorites];
+    const sorted = [...favorites, ...nonFavorites];
+
+    if (!searchLower) {
+      const projectCount = projects().length;
+      if (projectCount > 0) {
+        const perProjectLimit = Math.max(10, Math.floor(50 / projectCount));
+        return sorted.slice(0, perProjectLimit);
+      }
+    }
+
+    return sorted;
   }
 
   function handleContextMenu(e: MouseEvent, task: Task) {
@@ -273,9 +299,11 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
         </div>
 
         <div class="dropdown-list">
+          <Show when={!loading()} fallback={
+            <div class="loading-indicator">Loading...</div>
+          }>
           {projects().map((project) => {
             const projTasks = filteredTasks(project.id);
-            if (projTasks.length === 0 && search()) return null;
             return (
               <div class="dropdown-project">
                 <div
@@ -295,7 +323,7 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
                         class="dropdown-create-task"
                         onClick={(e) => {
                           e.stopPropagation();
-                          setCreateDialog(project);
+                          setCreateDialog({ project, initialTaskName: search() });
                         }}
                     >
                       <span class="create-icon">⊕</span> Create new task
@@ -323,12 +351,14 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
               </div>
             );
           })}
+          </Show>
         </div>
       </div>
 
       <Show when={createDialog()}>
         <CreateTaskDialog
-          project={createDialog()!}
+          project={createDialog()!.project}
+          initialTaskName={createDialog()!.initialTaskName}
           onClose={() => setCreateDialog(null)}
           onTaskCreated={handleTaskCreated}
         />

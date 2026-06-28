@@ -10,6 +10,7 @@ interface TimeInputProps {
 export default function TimeInput(props: TimeInputProps) {
     const [displayValue, setDisplayValue] = createSignal('');
     const [editing, setEditing] = createSignal(false);
+    let saveOnBlur = true;
 
     createEffect(() => {
         if (!editing()) {
@@ -17,10 +18,8 @@ export default function TimeInput(props: TimeInputProps) {
         }
     });
 
-    function handleBlur() {
-        const raw = displayValue().trim();
-        setEditing(false);
-
+    function commitValue(rawValue?: string) {
+        const raw = (rawValue ?? displayValue()).trim();
         if (!raw) {
             props.onSecondsChange(0);
             setDisplayValue('');
@@ -35,6 +34,16 @@ export default function TimeInput(props: TimeInputProps) {
             props.onSecondsChange(0);
             setDisplayValue('');
         }
+    }
+
+    function handleBlur() {
+        const raw = displayValue();
+        setEditing(false);
+        if (!saveOnBlur) {
+            saveOnBlur = true;
+            return;
+        }
+        commitValue(raw);
     }
 
     function handleInput(e: Event) {
@@ -53,20 +62,10 @@ export default function TimeInput(props: TimeInputProps) {
         const input = e.target as HTMLInputElement;
         if (e.key === 'Enter') {
             e.preventDefault();
-            const raw = displayValue().trim();
+            const raw = displayValue();
             setEditing(false);
-            if (!raw) {
-                props.onSecondsChange(0);
-                setDisplayValue('');
-            } else {
-                const seconds = parseTime(raw);
-                if (seconds !== null) {
-                    props.onSecondsChange(seconds);
-                    setDisplayValue(formatTime(seconds));
-                } else {
-                    setDisplayValue(props.seconds > 0 ? formatTime(props.seconds) : '');
-                }
-            }
+            commitValue(raw);
+            saveOnBlur = false;
             input.blur();
         } else if (e.key === 'Escape') {
             e.preventDefault();

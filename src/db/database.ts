@@ -23,6 +23,11 @@ class QueryResult<T> {
     return this._exec();
   }
 
+  limit(n: number): this {
+    this.limitCount = n;
+    return this;
+  }
+
   async first(): Promise<T | undefined> {
     this.limitCount = 1;
     const results = await this._exec();
@@ -77,6 +82,10 @@ class WhereField<T> {
       [`${this.field} IN (${placeholders})`],
       values,
     );
+  }
+
+  contains(value: string): QueryResult<T> {
+    return new QueryResult<T>(this.tableName, [`${this.field} LIKE ?`], [`%${value}%`]);
   }
 }
 

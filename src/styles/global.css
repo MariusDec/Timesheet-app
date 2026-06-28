@@ -134,6 +134,26 @@ body {
   text-align: center;
 }
 
+.loading-indicator {
+  color: var(--text-muted);
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 13px;
+  animation: pulse-text 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.loading-cell {
+  color: var(--text-muted);
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 13px;
+}
+
 /* ===== Buttons ===== */
 .btn {
   padding: 8px 16px;

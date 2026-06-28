@@ -1,4 +1,4 @@
-import { createSignal, For } from 'solid-js';
+import { createSignal, For, Show, onMount } from 'solid-js';
 import { db } from '../db/database';
 import { execute } from '../db/sqlite';
 import { downloadFile } from '../utils/download';
@@ -30,14 +30,18 @@ export default function Settings() {
   const [projects, setProjects] = createSignal<ProjectRow[]>([]);
   const [feedback, setFeedback] = createSignal('');
   const [showArchived, setShowArchived] = createSignal(false);
+  const [loading, setLoading] = createSignal(true);
   let fileInput!: HTMLInputElement;
 
   async function loadProjects() {
     const all = await db.projects.toArray();
     setProjects(all);
+    setLoading(false);
   }
 
-  loadProjects();
+  onMount(() => {
+    loadProjects();
+  });
 
   async function createProject() {
     const name = newProjectName().trim();
@@ -194,6 +198,9 @@ export default function Settings() {
           Active Projects
           <span class="settings-count">{totalActive()}</span>
         </h2>
+        <Show when={!loading()} fallback={
+          <div class="loading-indicator">Loading...</div>
+        }>
         {activeProjects().length === 0 ? (
           <p class="no-data">No active projects. Create one above.</p>
         ) : (
@@ -211,6 +218,7 @@ export default function Settings() {
             </For>
           </ul>
         )}
+        </Show>
       </section>
 
       {/* Archived Projects (collapsible) */}
@@ -220,6 +228,7 @@ export default function Settings() {
           Archived Projects
           <span class="settings-count">{archivedProjects().length}</span>
         </h2>
+        <Show when={!loading()}>
         {showArchived() && (
           archivedProjects().length === 0 ? (
             <p class="no-data">No archived projects.</p>
@@ -239,6 +248,7 @@ export default function Settings() {
             </ul>
           )
         )}
+        </Show>
       </section>
     </div>
   );

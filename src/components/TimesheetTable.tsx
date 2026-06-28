@@ -1,4 +1,4 @@
-import { createSignal, createEffect, on, Show, createMemo } from 'solid-js';
+import { createSignal, createEffect, on, Show, createMemo, onMount } from 'solid-js';
 import { db } from '../db/database';
 import { execute } from '../db/sqlite';
 import type { Project, Task, TimeEntry } from '../db/models';
@@ -27,43 +27,47 @@ export default function TimesheetTable(props: TimesheetTableProps) {
   const [projects, setProjects] = createSignal<Project[]>([]);
   const [tasks, setTasks] = createSignal<Task[]>([]);
   const [activeTasks, setActiveTasks] = createSignal<ActiveTask[]>([]);
+  const [timeEntries, setTimeEntries] = createSignal<TimeEntry[]>([]);
+  const [loading, setLoading] = createSignal(true);
+  const [reloadKey, setReloadKey] = createSignal(0);
   const [dropdownOpen, setDropdownOpen] = createSignal(false);
   const [buttonRect, setButtonRect] = createSignal<DOMRect | null>(null);
   const [confirmDeleteTask, setConfirmDeleteTask] = createSignal<ActiveTask | null>(null);
   let addBtnRef: HTMLDivElement | undefined;
 
-  // Load projects and tasks
-  async function load() {
-    const projs = await db.projects.where('archived').equals(0).sortBy('name');
-    const allTasks = await db.tasks.toArray();
-    setProjects(projs);
-    setTasks(allTasks);
-  }
-  load();
-
-  // Load time entries for the week
-  const [timeEntries, setTimeEntries] = createSignal<TimeEntry[]>([]);
-  const [reloadKey, setReloadKey] = createSignal(0);
-
   createEffect(
     on(
       () => [props.weekStart.toISOString().slice(0, 10), reloadKey()],
       async () => {
+        setLoading(true);
+
         const dates = getDatesInRange({
           start: props.weekStart,
           end: new Date(props.weekStart.getTime() + 6 * 86400000),
         });
         const dateKeys = dates.map((d) => d.getTime());
+
+        // Phase 1: Load time entries (critical data, fastest query)
         const entries = await db.timeEntries.where('date').anyOf(dateKeys).toArray();
         setTimeEntries(entries);
 
-        // Derive active tasks from entries for this week
+        // Phase 2: Load tasks and projects in parallel, then derive active tasks
+        const [allTasks, allProjects] = await Promise.all([
+          db.tasks.toArray(),
+          db.projects.where('archived').equals(0).sortBy('name'),
+        ]);
+        setTasks(allTasks);
+        setProjects(allProjects);
+
+        const taskMap = new Map(allTasks.map((t) => [t.id, t]));
+        const projMap = new Map(allProjects.map((p) => [p.id, p]));
+
         const taskIds = [...new Set(entries.map((e) => e.taskId))];
         const active: ActiveTask[] = [];
         for (const taskId of taskIds) {
-          const task = await db.tasks.get(taskId);
+          const task = taskMap.get(taskId);
           if (task && !task.deleted) {
-            const project = await db.projects.get(task.projectId);
+            const project = projMap.get(task.projectId);
             if (project) {
               active.push({ project, task });
             }
@@ -75,6 +79,8 @@ export default function TimesheetTable(props: TimesheetTableProps) {
           return a.task.name.localeCompare(b.task.name);
         });
         setActiveTasks(active);
+
+        setLoading(false);
       },
     ),
   );
@@ -231,6 +237,9 @@ export default function TimesheetTable(props: TimesheetTableProps) {
           </tr>
         </thead>
         <tbody>
+          <Show when={!loading()} fallback={
+            <tr><td colspan="10" class="loading-cell">Loading...</td></tr>
+          }>
           {activeTasks().map((at) => {
             return (
               <tr data-task-id={at.task.id}>
@@ -271,6 +280,7 @@ export default function TimesheetTable(props: TimesheetTableProps) {
             <td class="col-total" style={{ padding: 0, border: 'none' }} />
             <td class="col-action" style={{ padding: 0, border: 'none' }} />
           </tr>
+          </Show>
         </tbody>
         <tfoot>
           <tr class="ts-footer">

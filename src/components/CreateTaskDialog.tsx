@@ -4,12 +4,13 @@ import type { Project } from '../db/models';
 
 interface CreateTaskDialogProps {
   project: Project;
+  initialTaskName?: string;
   onClose: () => void;
   onTaskCreated: (taskId: number) => void;
 }
 
 export default function CreateTaskDialog(props: CreateTaskDialogProps) {
-  const [taskName, setTaskName] = createSignal('');
+  const [taskName, setTaskName] = createSignal(props.initialTaskName || '');
   const [error, setError] = createSignal('');
   let textareaRef: HTMLTextAreaElement | undefined;
 

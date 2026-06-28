@@ -7,6 +7,7 @@ const STORAGE_KEY = 'timesheet-db-v1';
 
 let db: SqlJsDatabase | null = null;
 let dbPath: string | null = null;
+let initPromise: Promise<void> | null = null;
 
 function isTauri(): boolean {
   return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
@@ -118,6 +119,24 @@ function runMigrations() {
     }
     d.run('PRAGMA user_version = 1');
   }
+
+  // Migration v2: deduplicate timeEntries and enforce UNIQUE(taskId, date)
+  if (currentVersion < 2) {
+    d.run(`
+      DELETE FROM timeEntries WHERE id NOT IN (
+        SELECT MIN(id) FROM timeEntries GROUP BY taskId, date
+      )
+    `);
+    d.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_timeEntries_taskId_date ON timeEntries(taskId, date)');
+    d.run('PRAGMA user_version = 2');
+  }
+
+  // Migration v3: delete orphaned time entries (tasks deleted or soft-deleted)
+  if (currentVersion < 3) {
+    d.run(`DELETE FROM timeEntries WHERE taskId NOT IN (SELECT id FROM tasks)`);
+    d.run(`DELETE FROM timeEntries WHERE taskId IN (SELECT id FROM tasks WHERE deleted = 1)`);
+    d.run('PRAGMA user_version = 3');
+  }
 }
 
 async function persist() {
@@ -137,6 +156,12 @@ async function persist() {
     }
     localStorage.setItem(STORAGE_KEY, btoa(binary));
   }
+}
+
+export async function initDb(): Promise<void> {
+  if (initPromise) return initPromise;
+  initPromise = ensureDb().then(() => {});
+  return initPromise;
 }
 
 export async function query<T = Record<string, unknown>>(

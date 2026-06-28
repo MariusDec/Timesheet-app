@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js';
+import { createSignal, createEffect, Show } from 'solid-js';
 import { For } from 'solid-js';
 import {
   getMonday,
@@ -11,6 +11,7 @@ import {
 import type { DateRange } from '../utils/dateUtils';
 import { formatTime } from '../utils/timeFormatter';
 import { db } from '../db/database';
+import type { TimeEntry } from '../db/models';
 import DateRangePicker from '../components/DateRangePicker';
 import { downloadFile } from '../utils/download';
 
@@ -29,23 +30,35 @@ export default function Export() {
     getMonthRange(today)
   );
   const [rows, setRows] = createSignal<ExportRow[]>([]);
+  const [loading, setLoading] = createSignal(true);
 
   createEffect(() => {
     const r = range();
     const dateKeys = getDatesInRange(r).map((d) => d.getTime());
 
     (async () => {
-      const entries = await db.timeEntries.where('date').anyOf(dateKeys).toArray();
-      const tasks = await db.tasks.toArray();
+      setLoading(true);
+      const [entries, tasks, projects] = await Promise.all([
+        db.timeEntries.where('date').anyOf(dateKeys).toArray(),
+        db.tasks.toArray(),
+        db.projects.toArray(),
+      ]);
       const taskMap = new Map(tasks.map((t) => [t.id, t]));
-      const projects = await db.projects.toArray();
       const projMap = new Map(projects.map((p) => [p.id, p]));
 
       const result: ExportRow[] = [];
+      const seen = new Map<string, TimeEntry>();
       for (const entry of entries) {
+        const key = `${entry.taskId}-${entry.date}`;
+        const prev = seen.get(key);
+        if (!prev || entry.seconds > prev.seconds) {
+          seen.set(key, entry);
+        }
+      }
+      for (const entry of seen.values()) {
         const task = taskMap.get(entry.taskId);
         const proj = task ? projMap.get(task.projectId) : null;
-        if (!task || !proj) continue;
+        if (!task || task.deleted || !proj) continue;
         const entryDate = new Date(entry.date);
         const decimalHours = Math.round((entry.seconds / 3600) * 100) / 100;
         result.push({
@@ -65,6 +78,7 @@ export default function Export() {
       });
 
       setRows(result);
+      setLoading(false);
     })();
   });
 
@@ -124,6 +138,9 @@ export default function Export() {
             </tr>
           </thead>
           <tbody>
+            <Show when={!loading()} fallback={
+              <tr><td colspan="4" class="loading-cell">Loading...</td></tr>
+            }>
             <For each={rows()}>
               {(row) => (
                 <tr>
@@ -139,6 +156,7 @@ export default function Export() {
                 <td colspan="4" class="no-data">No data found for the selected range.</td>
               </tr>
             )}
+            </Show>
           </tbody>
           {rows().length > 0 && (
             <tfoot>

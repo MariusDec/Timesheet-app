@@ -5,8 +5,11 @@ import App from './App';
 import Timesheet from './pages/Timesheet';
 import Export from './pages/Export';
 import Settings from './pages/Settings';
+import { initDb } from './db/sqlite';
 import './styles/themes.css';
 import './styles/global.css';
+
+initDb();
 
 render(
   () => (

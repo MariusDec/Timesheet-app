@@ -45,7 +45,7 @@
   --calendar-weekend: #fef2f2;
   --table-weekend-bg: #f1f5f9;
   --table-today-bg: #e0f2fe;
-  --table-holiday-bg: #fefce8;
+  --table-holiday-bg: #f1f5f9;
   --page-bg: #f1f5f9;
 }
 
@@ -93,9 +93,9 @@
   --calendar-week-selected: #155e75;
   --calendar-today: #22d3ee;
   --calendar-weekend: #2d1b1b;
-  --table-weekend-bg: #1a2636;
+  --table-weekend-bg: #17212f;
   --table-today-bg: #0a4061;
-  --table-holiday-bg: #1a2636;
+  --table-holiday-bg: #17212f;
   --page-bg: #0f172a;
 }
 
