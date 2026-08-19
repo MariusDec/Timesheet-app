@@ -67,6 +67,17 @@ async function main() {
   const icoBuf = createIco(pngBuffers);
   writeFileSync(join(iconsDir, 'icon.ico'), icoBuf);
   console.log('Generated icon.ico (multi-size, proper format)');
+
+  // Linux bundles install these into the hicolor icon theme by their dimensions
+  const linuxSizes = [32, 128, 256, 512];
+  for (const size of linuxSizes) {
+    const name = `${size}x${size}.png`;
+    await sharp(src)
+      .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .png()
+      .toFile(join(iconsDir, name));
+    console.log(`Generated ${name}`);
+  }
 }
 
 main().catch((e) => {

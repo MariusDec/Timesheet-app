@@ -1,0 +1,17 @@
+# Maintainer: Marius Donci <marius.donci@gmail.com>
+# Packages the prebuilt Tauri bundle produced by `npm run tauri:build`.
+pkgname=timesheet
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Timesheet - Track your work hours"
+arch=('x86_64')
+license=('custom')
+depends=('webkit2gtk-4.1' 'gtk3')
+options=('!strip' '!debug')
+
+# Path to the .deb emitted by the Tauri bundler, relative to this PKGBUILD.
+_deb="../src-tauri/target/release/bundle/deb/Timesheet_${pkgver}_amd64.deb"
+
+package() {
+  bsdtar -xOf "${startdir}/${_deb}" data.tar.gz | bsdtar -xf - -C "${pkgdir}"
+}
