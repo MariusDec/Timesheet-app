@@ -24,6 +24,11 @@ function MoonIcon() {
   );
 }
 
+function applyTheme(dark: boolean) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#1d2148' : '#6b5bd9');
+}
+
 export default function ThemeToggle() {
   const [isDark, setIsDark] = createSignal(false);
 
@@ -33,13 +38,13 @@ export default function ThemeToggle() {
     const shouldUseDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
     
     setIsDark(shouldUseDark);
-    document.documentElement.setAttribute('data-theme', shouldUseDark ? 'dark' : 'light');
+    applyTheme(shouldUseDark);
   });
 
   const toggleTheme = () => {
     const newTheme = !isDark();
     setIsDark(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme ? 'dark' : 'light');
+    applyTheme(newTheme);
     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   };
 

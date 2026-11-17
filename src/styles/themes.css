@@ -20,6 +20,18 @@
 :root {
   color-scheme: light;
 
+  /* Motion: the identity's tempo. Never the named CSS easings. */
+  --dur-instant: 120ms;
+  --dur-fast: 180ms;
+  --dur-base: 280ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0, 1);
+
+  /* Radius by surface */
+  --radius-card: 12px;
+  --radius-button: 14px;
+  --radius-sheet: 16px;
+
   /* Page & glass */
   --bg-gradient: linear-gradient(135deg, #e8deff 0%, #c8dcff 50%, #d4f5e2 100%);
   --page-bg: #dcdcff;
@@ -48,7 +60,8 @@
   /* Text */
   --text-primary: #2a1f4a;
   --text-secondary: #5b5380;
-  --text-muted: #6e6690;
+  --text-muted: #625a86; /* >= 4.5:1 on every gradient stop */
+  --text-dim: #4a4170;
 
   /* Lines */
   --border-color: var(--glass-border);
@@ -71,7 +84,10 @@
   --danger-gradient: linear-gradient(135deg, #d84a5a 0%, #c62828 100%);
   --success: #2e7d32;
   --success-hover: #256a29;
+  --success-bg: rgba(200, 240, 210, 0.55);
   --warning: #ef6c00;
+  --warning-bg: rgba(239, 108, 0, 0.14);
+  --danger-border: rgba(230, 150, 160, 0.7);
 
   /* Shadows (indigo-tinted, never neutral grey) */
   --shadow: rgba(75, 58, 158, 0.08);
@@ -158,6 +174,7 @@
   --text-primary: #e9e6f7;
   --text-secondary: #b0b8d8;
   --text-muted: #949dbd;
+  --text-dim: #9ea7c8;
 
   --border-color: var(--glass-border);
   --border-light: rgba(196, 208, 255, 0.1);
@@ -177,7 +194,10 @@
   --danger-gradient: linear-gradient(135deg, #d4575f 0%, #b83a48 100%);
   --success: #6fd9a6;
   --success-hover: #8de3b9;
+  --success-bg: rgba(111, 217, 166, 0.16);
   --warning: #ffc078;
+  --warning-bg: rgba(255, 192, 120, 0.14);
+  --danger-border: rgba(255, 154, 148, 0.38);
 
   --shadow: rgba(6, 8, 24, 0.3);
   --shadow-md: rgba(6, 8, 24, 0.45);
@@ -225,7 +245,7 @@
 
 /* Theme transition */
 body {
-  transition: color 0.2s ease;
+  transition: color var(--dur-fast) var(--ease-standard);
 }
 
 .nav,
@@ -246,7 +266,7 @@ body {
 .settings-input,
 .dialog-input,
 .dropdown-search {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
 }
 
 .calendar,
@@ -254,5 +274,17 @@ body {
 .calendar-nav-btn,
 .calendar-day,
 .calendar-week-row {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+
+/* Motion off: everything snaps to its end state. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

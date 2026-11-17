@@ -10,7 +10,9 @@
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
-    "gen:icons": "node scripts/gen-icons.mjs"
+    "gen:icons": "node scripts/gen-icons.mjs",
+    "arch:install": "bash scripts/arch-install.sh",
+    "arch:release": "bash scripts/arch-install.sh --build"
   },
   "dependencies": {
     "@solidjs/router": "0.16.1",

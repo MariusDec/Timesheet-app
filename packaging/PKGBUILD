@@ -2,7 +2,7 @@
 # Packages the prebuilt Tauri bundle produced by `npm run tauri:build`.
 pkgname=timesheet
 pkgver=1.0.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Timesheet - Track your work hours"
 arch=('x86_64')
 license=('custom')
