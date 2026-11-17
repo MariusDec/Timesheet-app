@@ -1,107 +1,231 @@
-:root {
-  /* Light Theme (default) - matches screenshot */
-  --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f8fafc;
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --border-color: #e2e8f0;
-  --border-light: #f1f5f9;
-  --accent: #06b6d4;
-  --accent-hover: #0891b2;
-  --accent-light: #ecfeff;
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --danger-light: #fef2f2;
-  --success: #22c55e;
-  --success-hover: #16a34a;
-  --warning: #f59e0b;
-  --shadow: rgba(0,0,0,0.04);
-  --shadow-md: rgba(0,0,0,0.08);
-  --shadow-lg: rgba(0,0,0,0.12);
-  --nav-bg: #ffffff;
-  --nav-text: #1e293b;
-  --nav-link: #64748b;
-  --nav-link-hover: #f1f5f9;
-  --nav-link-active: #e2e8f0;
-  --table-header-bg: #f8fafc;
-  --table-header-text: #64748b;
-  --table-border: #e2e8f0;
-  --table-hover: #f8fafc;
-  --dropdown-bg: #ffffff;
-  --dropdown-border: #e2e8f0;
-  --dropdown-hover: #f1f5f9;
-  --input-bg: #ffffff;
-  --input-border: #e2e8f0;
-  --input-focus-border: #06b6d4;
-  --input-focus-shadow: rgba(6, 182, 212, 0.15);
-  --btn-secondary-bg: #f1f5f9;
-  --btn-secondary-text: #475569;
-  --btn-secondary-hover: #e2e8f0;
-  --calendar-week-hover: #ecfeff;
-  --calendar-week-selected: #cffafe;
-  --calendar-today: #06b6d4;
-  --calendar-weekend: #fef2f2;
-  --table-weekend-bg: #f1f5f9;
-  --table-today-bg: #e0f2fe;
-  --table-holiday-bg: #f1f5f9;
-  --page-bg: #f1f5f9;
+/* ===== Theme: "Sunrise" (light) / "Blue hour" (dark) =====
+   Visual identity shared with learn-thai-app: a pastel lavender → periwinkle →
+   mint page gradient, frosted-glass surfaces with a white hairline, indigo
+   text, a violet accent and one opaque violet→blue gradient for filled
+   actions. The dark theme is the same hue journey after sunset. */
+
+@font-face {
+  font-family: "Sarabun";
+  src: url("/fonts/Sarabun-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sarabun";
+  src: url("/fonts/Sarabun-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
 }
 
+:root {
+  color-scheme: light;
+
+  /* Page & glass */
+  --bg-gradient: linear-gradient(135deg, #e8deff 0%, #c8dcff 50%, #d4f5e2 100%);
+  --page-bg: #dcdcff;
+  --glass-fill: rgba(255, 255, 255, 0.28);
+  --glass-fill-strong: rgba(255, 255, 255, 0.5);
+  --glass-fill-subtle: rgba(255, 255, 255, 0.14);
+  /* Popovers and dialogs: the page gradient at sheet opacity, so a dropdown
+     reads as the same material as the page it floats over. */
+  --glass-fill-sheet: linear-gradient(
+    135deg,
+    rgba(240, 233, 255, 0.86) 0%,
+    rgba(220, 232, 255, 0.86) 50%,
+    rgba(226, 248, 236, 0.86) 100%
+  );
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-border-subtle: rgba(255, 255, 255, 0.35);
+  --glass-shadow: 0 8px 24px rgba(75, 58, 158, 0.14);
+  --glass-shadow-lg: 0 16px 48px rgba(75, 58, 158, 0.24);
+  --blur: 25px;
+
+  /* Legacy surface names, mapped onto the glass system */
+  --bg-primary: transparent;
+  --bg-secondary: var(--glass-fill);
+  --bg-tertiary: rgba(255, 255, 255, 0.45);
+
+  /* Text */
+  --text-primary: #2a1f4a;
+  --text-secondary: #5b5380;
+  --text-muted: #6e6690;
+
+  /* Lines */
+  --border-color: var(--glass-border);
+  --border-light: rgba(75, 58, 158, 0.1);
+
+  /* Accent */
+  --accent: #6b5bd9;
+  --accent-text: #5246b8;
+  --accent-hover: #5246b8;
+  --accent-solid: #6b5bd9;
+  --accent-light: rgba(107, 91, 217, 0.14);
+  --accent-gradient: linear-gradient(135deg, #6b5bd9 0%, #4a5fd0 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #5f4fd0 0%, #3f53c4 100%);
+  --accent-glow: 0 4px 14px rgba(107, 91, 217, 0.35);
+
+  /* Status */
+  --danger: #c62828;
+  --danger-hover: #a91f1f;
+  --danger-light: rgba(255, 215, 220, 0.6);
+  --danger-gradient: linear-gradient(135deg, #d84a5a 0%, #c62828 100%);
+  --success: #2e7d32;
+  --success-hover: #256a29;
+  --warning: #ef6c00;
+
+  /* Shadows (indigo-tinted, never neutral grey) */
+  --shadow: rgba(75, 58, 158, 0.08);
+  --shadow-md: rgba(75, 58, 158, 0.16);
+  --shadow-lg: rgba(75, 58, 158, 0.24);
+
+  /* Navigation */
+  --nav-bg: rgba(255, 255, 255, 0.22);
+  --nav-text: #2a1f4a;
+  --nav-link: #5b5380;
+  --nav-link-hover: rgba(255, 255, 255, 0.4);
+  --nav-link-active: rgba(255, 255, 255, 0.55);
+
+  /* Tables */
+  --table-header-bg: rgba(255, 255, 255, 0.3);
+  --table-header-text: #5b5380;
+  --table-border: rgba(75, 58, 158, 0.14);
+  --table-hover: rgba(255, 255, 255, 0.3);
+  --table-weekend-bg: rgba(74, 65, 112, 0.06);
+  --table-today-bg: rgba(107, 91, 217, 0.13);
+  --table-holiday-bg: rgba(74, 65, 112, 0.06);
+
+  /* Dropdowns & inputs */
+  --dropdown-bg: var(--glass-fill-sheet);
+  --dropdown-border: rgba(75, 58, 158, 0.1);
+  --dropdown-hover: rgba(255, 255, 255, 0.55);
+  --input-bg: rgba(255, 255, 255, 0.45);
+  --input-border: rgba(255, 255, 255, 0.8);
+  --input-focus-border: #6b5bd9;
+  --input-focus-shadow: rgba(107, 91, 217, 0.22);
+
+  /* Secondary buttons: elevated glass */
+  --btn-secondary-bg: rgba(255, 255, 255, 0.45);
+  --btn-secondary-text: #2a1f4a;
+  --btn-secondary-hover: rgba(255, 255, 255, 0.7);
+
+  /* Calendar */
+  --calendar-week-hover: rgba(107, 91, 217, 0.1);
+  --calendar-week-selected: rgba(107, 91, 217, 0.2);
+  --calendar-today: #5246b8;
+  --calendar-weekend: rgba(255, 220, 240, 0.55);
+
+  /* Overlay behind dialogs */
+  --overlay: rgba(42, 31, 74, 0.28);
+
+  /* Scrollbars */
+  --scrollbar-thumb: rgba(75, 58, 158, 0.34);
+  --scrollbar-thumb-from: rgba(75, 58, 158, 0.42);
+  --scrollbar-thumb-to: rgba(75, 58, 158, 0.22);
+  --scrollbar-thumb-hover-from: #6b5bd9;
+  --scrollbar-thumb-hover-to: #4a5fd0;
+}
+
+/* Dark — "blue hour": afterglow violet → indigo → navy → petrol teal. Glass is
+   tinted cool blue-white, never neutral white, which would read as grey. */
 [data-theme="dark"] {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border-color: #334155;
-  --border-light: #1e293b;
-  --accent: #03859b;
-  --accent-hover: #06b6d4;
-  --accent-light: #164e63;
-  --danger: #f87171;
-  --danger-hover: #ef4444;
-  --danger-light: #450a0a;
-  --success: #4ade80;
-  --success-hover: #22c55e;
-  --warning: #fbbf24;
-  --shadow: rgba(0,0,0,0.3);
-  --shadow-md: rgba(0,0,0,0.4);
-  --shadow-lg: rgba(0,0,0,0.5);
-  --nav-bg: #1e293b;
-  --nav-text: #e2e8f0;
-  --nav-link: #94a3b8;
-  --nav-link-hover: #1e293b;
-  --nav-link-active: #334155;
-  --table-header-bg: #1a2332;
-  --table-header-text: #94a3b8;
-  --table-border: #334155;
-  --table-hover: #1e293b;
-  --dropdown-bg: #1e293b;
-  --dropdown-border: #334155;
-  --dropdown-hover: #334155;
-  --input-bg: #1e293b;
-  --input-border: #334155;
-  --input-focus-border: #22d3ee;
-  --input-focus-shadow: rgba(34, 211, 238, 0.15);
-  --btn-secondary-bg: #334155;
-  --btn-secondary-text: #94a3b8;
-  --btn-secondary-hover: #475569;
-  --calendar-week-hover: #164e63;
-  --calendar-week-selected: #155e75;
-  --calendar-today: #22d3ee;
-  --calendar-weekend: #2d1b1b;
-  --table-weekend-bg: #17212f;
-  --table-today-bg: #0a4061;
-  --table-holiday-bg: #17212f;
-  --page-bg: #0f172a;
+  color-scheme: dark;
+
+  --bg-gradient: linear-gradient(135deg, #2a1e4c 0%, #1d2148 32%, #16294a 66%, #0f2b3c 100%);
+  --page-bg: #1a2148;
+  --glass-fill: rgba(173, 190, 255, 0.07);
+  --glass-fill-strong: linear-gradient(
+    135deg,
+    rgba(198, 208, 255, 0.2) 0%,
+    rgba(150, 170, 255, 0.09) 100%
+  );
+  --glass-fill-subtle: rgba(173, 190, 255, 0.035);
+  --glass-fill-sheet: linear-gradient(
+    135deg,
+    rgba(42, 30, 76, 0.9) 0%,
+    rgba(29, 33, 72, 0.9) 32%,
+    rgba(22, 41, 74, 0.9) 66%,
+    rgba(15, 43, 60, 0.9) 100%
+  );
+  --glass-border: rgba(196, 208, 255, 0.22);
+  --glass-border-subtle: rgba(196, 208, 255, 0.11);
+  --glass-shadow: 0 8px 24px rgba(6, 8, 24, 0.45);
+  --glass-shadow-lg: 0 16px 48px rgba(5, 6, 15, 0.6);
+  --blur: 20px;
+
+  --bg-secondary: var(--glass-fill);
+  --bg-tertiary: rgba(173, 190, 255, 0.1);
+
+  --text-primary: #e9e6f7;
+  --text-secondary: #b0b8d8;
+  --text-muted: #949dbd;
+
+  --border-color: var(--glass-border);
+  --border-light: rgba(196, 208, 255, 0.1);
+
+  --accent: #b3a5ff;
+  --accent-text: #b3a5ff;
+  --accent-hover: #d8d0ff;
+  --accent-solid: #7a6ae4;
+  --accent-light: rgba(179, 165, 255, 0.16);
+  --accent-gradient: linear-gradient(135deg, #7a6ae4 0%, #5a71dd 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #8a7bef 0%, #6a80e8 100%);
+  --accent-glow: 0 4px 16px rgba(122, 106, 228, 0.4);
+
+  --danger: #ff9a94;
+  --danger-hover: #ffb4af;
+  --danger-light: rgba(255, 154, 148, 0.16);
+  --danger-gradient: linear-gradient(135deg, #d4575f 0%, #b83a48 100%);
+  --success: #6fd9a6;
+  --success-hover: #8de3b9;
+  --warning: #ffc078;
+
+  --shadow: rgba(6, 8, 24, 0.3);
+  --shadow-md: rgba(6, 8, 24, 0.45);
+  --shadow-lg: rgba(5, 6, 15, 0.6);
+
+  --nav-bg: rgba(20, 22, 56, 0.35);
+  --nav-text: #e9e6f7;
+  --nav-link: #b0b8d8;
+  --nav-link-hover: rgba(173, 190, 255, 0.1);
+  --nav-link-active: rgba(173, 190, 255, 0.16);
+
+  --table-header-bg: rgba(173, 190, 255, 0.06);
+  --table-header-text: #b0b8d8;
+  --table-border: rgba(196, 208, 255, 0.16);
+  --table-hover: rgba(173, 190, 255, 0.06);
+  --table-weekend-bg: rgba(5, 8, 30, 0.22);
+  --table-today-bg: rgba(179, 165, 255, 0.16);
+  --table-holiday-bg: rgba(5, 8, 30, 0.22);
+
+  --dropdown-bg: var(--glass-fill-sheet);
+  --dropdown-border: rgba(196, 208, 255, 0.12);
+  --dropdown-hover: rgba(173, 190, 255, 0.12);
+  --input-bg: rgba(173, 190, 255, 0.07);
+  --input-border: rgba(196, 208, 255, 0.22);
+  --input-focus-border: #b3a5ff;
+  --input-focus-shadow: rgba(179, 165, 255, 0.22);
+
+  --btn-secondary-bg: rgba(173, 190, 255, 0.1);
+  --btn-secondary-text: #e9e6f7;
+  --btn-secondary-hover: rgba(173, 190, 255, 0.18);
+
+  --calendar-week-hover: rgba(179, 165, 255, 0.12);
+  --calendar-week-selected: rgba(179, 165, 255, 0.22);
+  --calendar-today: #b3a5ff;
+  --calendar-weekend: rgba(196, 122, 214, 0.2);
+
+  --overlay: rgba(5, 6, 20, 0.5);
+
+  --scrollbar-thumb: rgba(196, 208, 255, 0.26);
+  --scrollbar-thumb-from: rgba(196, 208, 255, 0.34);
+  --scrollbar-thumb-to: rgba(196, 208, 255, 0.16);
+  --scrollbar-thumb-hover-from: #b3a5ff;
+  --scrollbar-thumb-hover-to: #7a6ae4;
 }
 
 /* Theme transition */
 body {
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .nav,

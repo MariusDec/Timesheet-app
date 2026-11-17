@@ -12,12 +12,88 @@ textarea {
   caret-color: currentColor;
 }
 
+/* Form controls don't inherit the page font by default. */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+html {
+  background: var(--page-bg);
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: "Sarabun", system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   color: var(--text-primary);
-  background: var(--page-bg);
+  background: var(--bg-gradient) fixed;
+  min-height: 100vh;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Glass surfaces =====
+   Cards: a translucent wash with a white hairline and an indigo shadow (no
+   backdrop-filter: it would become the containing block for the fixed-position
+   dropdowns rendered inside them). Floating layers blur what is under them. */
+.top-nav,
+.date-dropdown,
+.date-range-picker-dropdown,
+.project-task-dropdown,
+.context-menu,
+.dialog,
+.confirm-dialog {
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  backdrop-filter: blur(var(--blur)) saturate(140%);
+}
+
+/* ===== Scrollbars ===== */
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 4px 0;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--scrollbar-thumb-from), var(--scrollbar-thumb-to));
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+    min-height: 24px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--scrollbar-thumb-hover-from), var(--scrollbar-thumb-hover-to));
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* ===== Focus ring ===== */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Press feedback */
+.btn:active:not(:disabled),
+.export-btn:active:not(:disabled),
+.range-tab:active,
+.quick-btn:active,
+.theme-toggle-btn:active {
+  transform: scale(0.98);
 }
 
 /* ===== Navigation ===== */
@@ -25,34 +101,49 @@ body {
   background: var(--nav-bg);
   color: var(--nav-text);
   padding: 0 24px;
-  height: 55px;
+  height: 60px;
   display: flex;
   align-items: center;
   gap: 24px;
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--glass-border-subtle);
+  box-shadow: 0 4px 20px var(--shadow);
 }
 
 .nav-brand {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--accent);
   white-space: nowrap;
+  letter-spacing: -0.2px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="dark"] .nav-brand {
+  background: linear-gradient(135deg, #d8d0ff 0%, #9fb2ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .nav-links-group {
   display: flex;
   align-items: center;
   gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--glass-fill-subtle);
+  border: 1px solid var(--glass-border-subtle);
 }
 
 .nav-link {
   color: var(--nav-link);
   text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s;
@@ -65,8 +156,10 @@ body {
 }
 
 .nav-link.active {
-  color: var(--accent);
-  font-weight: bold;
+  color: #ffffff;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  box-shadow: var(--accent-glow);
 }
 
 .nav-spacer {
@@ -75,11 +168,11 @@ body {
 
 /* ===== Theme Toggle Button ===== */
 .theme-toggle-btn {
-  background: none;
+  background: var(--glass-fill);
   border: 1px solid var(--border-color);
   width: 40px;
-  height: 36px;
-  border-radius: 8px;
+  height: 40px;
+  border-radius: 999px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -91,8 +184,8 @@ body {
 
 .theme-toggle-btn:hover {
   background: var(--nav-link-hover);
-  border-color: var(--text-muted);
-  color: var(--text-primary);
+  border-color: var(--accent);
+  color: var(--accent-text);
 }
 
 .theme-toggle-icon {
@@ -104,9 +197,8 @@ body {
 
 /* ===== Main Content ===== */
 .main-content {
-  padding: 24px 32px;
-  background: var(--page-bg);
-  min-height: calc(100vh - 55px);
+  padding: 28px 32px;
+  min-height: calc(100vh - 60px);
 }
 
 /* ===== Page ===== */
@@ -156,40 +248,43 @@ body {
 
 /* ===== Buttons ===== */
 .btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
+  padding: 8px 18px;
+  border: 1px solid transparent;
+  border-radius: 14px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
+  box-shadow: var(--accent-glow);
 }
 
 .btn-primary:hover {
-  background: var(--accent-hover);
+  background: var(--accent-gradient-hover);
 }
 
 .btn-secondary {
   background: var(--btn-secondary-bg);
   color: var(--btn-secondary-text);
+  border-color: var(--border-color);
 }
 
 .btn-secondary:hover {
   background: var(--btn-secondary-hover);
+  border-color: var(--accent);
 }
 
 .btn-danger {
-  background: var(--danger);
+  background: var(--danger-gradient);
   color: white;
 }
 
 .btn-danger:hover {
-  background: var(--danger-hover);
+  filter: brightness(1.08);
 }
 
 /* ===== Week Navigator ===== */
@@ -214,18 +309,18 @@ body {
 }
 
 .nav-arrow-btn:first-child {
-  border-radius: 6px 0 0 6px;
+  border-radius: 999px 0 0 999px;
   border-right: none;
 }
 
 .nav-arrow-btn:last-child {
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 999px 999px 0;
   border-left: none;
 }
 
 .nav-arrow-btn:hover {
   background: var(--bg-tertiary);
-  color: var(--text-primary);
+  color: var(--accent-text);
 }
 
 .week-label-wrap {
@@ -254,7 +349,7 @@ body {
 
 .week-label-btn:hover {
   background: var(--bg-tertiary);
-  border-color: var(--text-muted);
+  color: var(--accent-text);
 }
 
 .week-cal-icon {
@@ -270,10 +365,11 @@ body {
   right: -40px;
   background: var(--dropdown-bg);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px var(--shadow-md);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow-lg);
   z-index: 50;
   min-width: 280px;
+  overflow: hidden;
 }
 
 .date-dropdown-header {
@@ -294,7 +390,7 @@ body {
   cursor: pointer;
   text-align: left;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 10px;
   color: var(--text-primary);
 }
 
@@ -305,8 +401,8 @@ body {
 .dropdown-date-input {
   width: 100%;
   padding: 6px 8px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
   font-size: 14px;
   background: var(--input-bg);
   color: var(--text-primary);
@@ -333,8 +429,8 @@ body {
 .calendar-quick-btn {
   flex: 1;
   padding: 6px 10px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  background: var(--glass-fill-subtle);
   border-radius: 0;
   font-size: 12px;
   cursor: pointer;
@@ -344,33 +440,32 @@ body {
 }
 
 .calendar-quick-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
   background: var(--accent-light);
 }
 
 
 .calendar-quick-selects .calendar-quick-btn:not(:first-child):not(:last-child),
 .date-range-picker-quick-selects .calendar-quick-btn:not(:first-child):not(:last-child) {
-  border-bottom: 1px solid var(--border-color);
-  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
   border-top: none;
   border-left: none;
 }
 
 .calendar-quick-selects .calendar-quick-btn:first-child,
 .date-range-picker-quick-selects .calendar-quick-btn:first-child {
-  border-radius: 8px 0 0 0;
-  border-bottom: 1px solid var(--border-color);
-  border-right: 1px solid var(--border-color);
+  border-radius: 0;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
   border-top: none;
   border-left: none;
 }
 
 .calendar-quick-selects .calendar-quick-btn:last-child,
 .date-range-picker-quick-selects .calendar-quick-btn:last-child {
-  border-radius: 0 8px 0 0;
-  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  border-bottom: 1px solid var(--border-light);
   border-right: none;
   border-top: none;
   border-left: none;
@@ -394,10 +489,10 @@ body {
   width: 30px;
   height: 30px;
   border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  border-radius: 4px;
+  background: var(--btn-secondary-bg);
+  border-radius: 999px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -406,8 +501,9 @@ body {
 }
 
 .calendar-nav-btn:hover {
-  background: var(--bg-tertiary);
-  border-color: var(--text-muted);
+  background: var(--btn-secondary-hover);
+  border-color: var(--accent);
+  color: var(--accent-text);
 }
 
 .calendar-grid {
@@ -434,7 +530,7 @@ body {
 .calendar-week-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-radius: 4px;
+  border-radius: 10px;
   transition: background-color 0.1s ease;
 }
 
@@ -453,7 +549,7 @@ body {
   background: none;
   cursor: pointer;
   font-size: 13px;
-  border-radius: 4px;
+  border-radius: 10px;
   transition: all 0.1s;
   color: var(--text-primary);
   display: flex;
@@ -463,7 +559,7 @@ body {
 }
 
 .calendar-day:hover:not(:disabled):not(.no-hover-effect) {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
 }
 
@@ -505,8 +601,8 @@ body {
 /* ===== Timesheet Table ===== */
 .timesheet-table-wrapper {
   background: var(--bg-secondary);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px var(--shadow);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
   overflow-x: auto;
   border: 1px solid var(--border-color);
 }
@@ -519,8 +615,8 @@ body {
 
 .timesheet-table thead th {
   background: var(--table-header-bg);
-  padding: 10px 8px;
-  font-weight: 500;
+  padding: 12px 8px;
+  font-weight: 600;
   font-size: 12px;
   color: var(--table-header-text);
   border-bottom: 1px solid var(--table-border);
@@ -620,7 +716,7 @@ body {
 
 .day-header .day-name {
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .day-header .day-date {
@@ -652,6 +748,11 @@ body {
   background: var(--table-today-bg);
 }
 
+.timesheet-table thead th.col-day-today .day-name,
+.timesheet-table thead th.col-day-today .day-date {
+  color: var(--accent-text);
+}
+
 /* Task label */
 .task-label {
   display: flex;
@@ -680,12 +781,13 @@ body {
   width: 85%;
   padding: 6px 8px;
   border: 1px solid var(--input-border);
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 13px;
   text-align: center;
   background: var(--input-bg);
   color: var(--text-primary);
-  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
   transition: all 0.15s;
 }
 
@@ -694,14 +796,14 @@ body {
 }
 
 .time-input:hover {
-  border-color: var(--text-muted);
+  border-color: var(--accent);
 }
 
 .time-input:focus {
   outline: none;
   border-color: var(--input-focus-border);
   background: var(--input-bg);
-  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+  box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 
 /* ===== Delete Button ===== */
@@ -712,7 +814,7 @@ body {
   background: none;
   color: var(--text-muted);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -732,9 +834,9 @@ body {
   gap: 6px;
   padding: 10px 16px;
   cursor: pointer;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.15s;
 }
 
@@ -762,7 +864,7 @@ body {
   border: 2px dashed var(--border-color);
   background: none;
   color: var(--text-muted);
-  border-radius: 6px;
+  border-radius: 14px;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
@@ -775,7 +877,7 @@ body {
 
 .add-row-btn:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
   background: var(--accent-light);
 }
 
@@ -798,9 +900,10 @@ body {
   width: 480px;
   min-height: 100px;
   background: var(--dropdown-bg);
-  border-radius: 12px;
-  box-shadow: 0 8px 40px var(--shadow-lg);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow-lg);
   z-index: 100;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border-color);
@@ -822,9 +925,9 @@ body {
 
 .dropdown-search {
   width: 100%;
-  padding: 5px 8px;
+  padding: 7px 12px;
   border: 1px solid var(--input-border);
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 13px;
   background: var(--input-bg);
   color: var(--text-primary);
@@ -841,7 +944,7 @@ body {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: var(--bg-tertiary);
+  background: var(--glass-fill-subtle);
   border-bottom: 1px solid var(--dropdown-border);
 }
 
@@ -853,17 +956,17 @@ body {
 .dropdown-sort-btn {
   padding: 4px 10px;
   border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  border-radius: 14px;
+  background: var(--btn-secondary-bg);
+  border-radius: 999px;
   font-size: 12px;
   cursor: pointer;
   color: var(--text-primary);
 }
 
 .dropdown-sort-btn.active {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
-  border-color: var(--accent);
+  border-color: transparent;
 }
 
 .dropdown-list {
@@ -888,7 +991,7 @@ body {
 }
 
 .dropdown-project-header:hover {
-  background: var(--bg-tertiary);
+  background: var(--dropdown-hover);
 }
 
 .dropdown-chevron {
@@ -910,7 +1013,8 @@ body {
 }
 
 .dropdown-project-dot.expanded {
-  background: var(--accent);
+  background: var(--accent-gradient);
+  box-shadow: 0 0 0 3px var(--accent-light);
 }
 
 .dropdown-project-name {
@@ -920,9 +1024,9 @@ body {
 .dropdown-count {
   font-size: 11px;
   color: var(--text-muted);
-  background: var(--bg-tertiary);
+  background: var(--accent-light);
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 999px;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -949,11 +1053,11 @@ body {
 }
 
 .dropdown-task:nth-child(2) {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-light);
 }
 
 .dropdown-task:not(:last-child) {
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .dropdown-task:hover {
@@ -982,10 +1086,11 @@ body {
   padding: 8px 16px 8px 34px;
   border: none;
   background: none;
-  color: var(--accent);
-  border-radius: 4px;
+  color: var(--accent-text);
+  border-radius: 0;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 600;
   margin-top: 4px;
   display: flex;
   align-items: center;
@@ -1004,14 +1109,16 @@ body {
   height: 20px;
   font-size: 16px;
   line-height: 1;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ===== Dialog ===== */
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   z-index: 110;
   display: flex;
   align-items: center;
@@ -1019,11 +1126,12 @@ body {
 }
 
 .dialog {
-  background: var(--bg-secondary);
-  border-radius: 12px;
+  background: var(--glass-fill-sheet);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   padding: 24px;
   width: 360px;
-  box-shadow: 0 8px 40px var(--shadow-lg);
+  box-shadow: var(--glass-shadow-lg);
 }
 
 .dialog h3 {
@@ -1041,8 +1149,8 @@ body {
 .dialog-input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
   font-size: 14px;
   margin-bottom: 8px;
   background: var(--input-bg);
@@ -1052,7 +1160,7 @@ body {
 .dialog-input:focus {
   outline: none;
   border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+  box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 
 .dialog-input-multiline {
@@ -1079,16 +1187,17 @@ body {
   position: fixed;
   background: var(--dropdown-bg);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 0 4px 16px var(--shadow-md);
+  border-radius: 14px;
+  box-shadow: var(--glass-shadow-lg);
   z-index: 200;
-  min-width: 140px;
-  padding: 4px 0;
+  min-width: 160px;
+  padding: 6px;
   overflow: hidden;
 }
 
 .context-menu-item {
-  padding: 8px 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
   color: var(--text-primary);
@@ -1110,15 +1219,17 @@ body {
 
 .context-menu-separator {
   height: 1px;
-  background: var(--border-color);
-  margin: 4px 8px;
+  background: var(--border-light);
+  margin: 4px 6px;
 }
 
 /* ===== Confirm Dialog (inline for dropdown) ===== */
 .confirm-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   z-index: 80;
   display: flex;
   align-items: center;
@@ -1126,11 +1237,12 @@ body {
 }
 
 .confirm-dialog {
-  background: var(--bg-secondary);
-  border-radius: 10px;
+  background: var(--glass-fill-sheet);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   padding: 24px;
   width: 340px;
-  box-shadow: 0 8px 40px var(--shadow-lg);
+  box-shadow: var(--glass-shadow-lg);
 }
 
 .confirm-text {
@@ -1172,8 +1284,8 @@ body {
 .range-tab {
   padding: 6px 16px;
   border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  border-radius: 6px;
+  background: var(--btn-secondary-bg);
+  border-radius: 999px;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
@@ -1181,9 +1293,10 @@ body {
 }
 
 .range-tab.active {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
-  border-color: var(--accent);
+  border-color: transparent;
+  box-shadow: var(--accent-glow);
 }
 
 .range-nav {
@@ -1201,8 +1314,8 @@ body {
 .quick-btn {
   padding: 4px 12px;
   border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  border-radius: 4px;
+  background: var(--btn-secondary-bg);
+  border-radius: 999px;
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s;
@@ -1211,15 +1324,17 @@ body {
 
 .quick-btn:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .export-btn {
   padding: 8px 20px;
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 14px;
+  font-weight: 600;
+  box-shadow: var(--accent-glow);
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -1230,18 +1345,20 @@ body {
 }
 
 .export-btn:hover {
-  background: var(--accent-hover);
+  background: var(--accent-gradient-hover);
 }
 
 .export-btn:disabled {
-  background: var(--text-muted);
+  box-shadow: none;
+  opacity: 0.45;
+  background: var(--accent-gradient);
   cursor: not-allowed;
 }
 
 .export-table-wrap {
   background: var(--bg-secondary);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px var(--shadow);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
   overflow: hidden;
   border: 1px solid var(--border-color);
 }
@@ -1300,7 +1417,7 @@ body {
   background: var(--bg-secondary);
   border-radius: 0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.15s;
@@ -1312,7 +1429,7 @@ body {
 
 .date-range-picker-btn:hover {
   background: var(--bg-tertiary);
-  border-color: var(--text-muted);
+  color: var(--accent-text);
 }
 
 .date-range-picker-icon {
@@ -1334,12 +1451,13 @@ body {
   position: absolute;
   top: calc(100% + 6px);
   right: -40px;
-  background: var(--bg-secondary);
+  background: var(--dropdown-bg);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  box-shadow: 0 8px 32px var(--shadow-md);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow-lg);
   z-index: 50;
   padding-bottom: 12px;
+  overflow: hidden;
 }
 
 /* Dual-month navigation header */
@@ -1398,8 +1516,8 @@ body {
 .date-range-picker-hint {
   text-align: center;
   font-size: 12px;
-  font-weight: 500;
-  color: var(--accent);
+  font-weight: 600;
+  color: var(--accent-text);
   padding: 6px 12px 2px;
 }
 
@@ -1413,25 +1531,25 @@ body {
 
 .drp-range-start,
 .drp-range-end {
-  background: var(--accent) !important;
+  background: var(--accent-gradient) !important;
   color: white !important;
   font-weight: 600 !important;
 }
 
 .drp-range-start {
-  border-radius: 8px 0 0 8px;
+  border-radius: 10px 0 0 10px;
 }
 
 .drp-range-end {
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 10px 10px 0;
 }
 
 /* ===== Settings Page ===== */
 .settings-section {
   background: var(--bg-secondary);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px var(--shadow);
-  padding: 20px;
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  padding: 20px 22px;
   margin-bottom: 16px;
   border: 1px solid var(--border-color);
   max-width: 700px;
@@ -1451,9 +1569,9 @@ body {
 
 .settings-input {
   flex: 1;
-  padding: 8px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
   font-size: 14px;
   background: var(--input-bg);
   color: var(--text-primary);
@@ -1462,7 +1580,7 @@ body {
 .settings-input:focus {
   outline: none;
   border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+  box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 
 .project-list {
@@ -1491,9 +1609,10 @@ body {
 }
 
 .btn-primary:disabled {
-  background: var(--text-muted);
+  box-shadow: none;
+  background: var(--accent-gradient);
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.45;
 }
 
 /* Settings section title */
@@ -1510,10 +1629,10 @@ body {
 .settings-count {
   font-size: 12px;
   font-weight: 500;
-  color: var(--text-muted);
-  background: var(--bg-tertiary);
+  color: var(--accent-text);
+  background: var(--accent-light);
   padding: 1px 8px;
-  border-radius: 10px;
+  border-radius: 999px;
 }
 
 .settings-help {
@@ -1570,7 +1689,7 @@ body {
 .settings-feedback {
   margin-top: 8px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .settings-section-title--clickable {
@@ -1579,7 +1698,7 @@ body {
 }
 
 .settings-section-title--clickable:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .settings-chevron {

@@ -15,7 +15,7 @@ interface ProjectRow {
   archived: boolean;
 }
 
-const DOT_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6'];
+const DOT_COLORS = ['#6b5bd9', '#4a5fd0', '#2e9e7a', '#d9578f', '#ef8a3a', '#9b6bd9', '#3b8fd0', '#c9a227'];
 
 function projectColor(name: string): string {
   let hash = 0;
