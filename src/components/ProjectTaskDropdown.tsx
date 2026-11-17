@@ -2,6 +2,8 @@ import { createSignal, createEffect, onCleanup, Show } from 'solid-js';
 import CreateTaskDialog from './CreateTaskDialog';
 import { db } from '../db/database';
 import type { Project, Task } from '../db/models';
+import { normalizeTaskName } from '../utils/taskName';
+import { backdropClose } from '../utils/overlay';
 
 interface ProjectTaskDropdownProps {
   buttonRect: DOMRect;
@@ -235,10 +237,7 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
 
   async function handleEditSave() {
     const task = editTask();
-    const name = editTaskName()
-      .replace(/\n/g, ' ')
-      .replace(/\s{2,}/g, ' ')
-      .trim();
+    const name = normalizeTaskName(editTaskName());
     if (!task || !name) return;
     await db.tasks.update(task.id, { name });
     await loadTasks(task.projectId);
@@ -279,6 +278,14 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
             placeholder="Search Project or Task"
             value={search()}
             onInput={(e) => setSearch(e.target.value?.trim() ?? '')}
+            onPaste={(e) => {
+              const text = e.clipboardData?.getData('text/plain') ?? '';
+              if (!/[\r\n]/.test(text)) return;
+              e.preventDefault();
+              const el = e.currentTarget;
+              el.setRangeText(normalizeTaskName(text), el.selectionStart ?? 0, el.selectionEnd ?? 0, 'end');
+              setSearch(el.value.trim());
+            }}
           />
         </div>
 
@@ -384,8 +391,8 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
       </Show>
 
       <Show when={confirmDeleteTask()}>
-        <div class="confirm-overlay" onClick={() => setConfirmDeleteTask(null)}>
-          <div class="confirm-dialog" onClick={(e) => e.stopPropagation()}>
+        <div class="confirm-overlay" {...backdropClose(() => setConfirmDeleteTask(null))}>
+          <div class="confirm-dialog">
             <p class="confirm-text">
               Are you sure you want to delete <strong>{confirmDeleteTask()?.name}</strong>?
             </p>
@@ -403,8 +410,8 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
       </Show>
 
       <Show when={editTask()}>
-        <div class="dialog-overlay" onClick={() => { setEditTask(null); setEditTaskName(''); }}>
-          <div class="dialog" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => {
+        <div class="dialog-overlay" {...backdropClose(() => { setEditTask(null); setEditTaskName(''); })}>
+          <div class="dialog" onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               handleEditSave();

@@ -13,6 +13,7 @@ import { isRomanianHoliday, getHolidayName } from '../utils/holidays';
 import TimeInput from './TimeInput';
 import ProjectTaskDropdown from './ProjectTaskDropdown';
 import { formatTime } from '../utils/timeFormatter';
+import { backdropClose } from '../utils/overlay';
 
 interface TimesheetTableProps {
   weekStart: Date;
@@ -306,8 +307,8 @@ export default function TimesheetTable(props: TimesheetTableProps) {
       </Show>
 
       <Show when={confirmDeleteTask()}>
-        <div class="confirm-overlay" onClick={() => setConfirmDeleteTask(null)}>
-          <div class="confirm-dialog" onClick={(e) => e.stopPropagation()}>
+        <div class="confirm-overlay" {...backdropClose(() => setConfirmDeleteTask(null))}>
+          <div class="confirm-dialog">
             <p class="confirm-text">
               Are you sure you want to delete the time entries for <strong>{confirmDeleteTask()?.task.name}</strong> for {formatDateShort(props.weekStart)} - {formatDateShort(new Date(props.weekStart.getTime() + 6 * 86400000))}?
             </p>

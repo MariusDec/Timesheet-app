@@ -213,11 +213,20 @@ textarea:focus-visible {
   color: var(--text-primary);
 }
 
-.page-toolbar {
+.page-toolbar,
+.export-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  /* Keep the week / range switcher reachable on long tables. The fixed
+     background lines up with the body gradient so the bar looks transparent
+     while hiding the rows scrolling underneath. */
+  position: sticky;
+  top: 60px;
+  z-index: 60;
+  background: var(--bg-gradient) fixed;
+  margin: -12px 0 8px;
+  padding: 12px 0;
 }
 
 .no-data {
@@ -791,6 +800,20 @@ textarea:focus-visible {
   transition: all 0.15s;
 }
 
+.time-input-wrap {
+  display: flex;
+  justify-content: center; /* an expanded input overflows equally on both sides */
+}
+
+.time-input-wrap .time-input {
+  flex: none;
+}
+
+.time-input-editing {
+  position: relative;
+  z-index: 3;
+}
+
 .time-input::placeholder {
   color: transparent;
 }
@@ -1265,13 +1288,6 @@ textarea:focus-visible {
 }
 
 /* ===== Export Page ===== */
-.export-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
 .export-controls {
   margin-bottom: 20px;
 }

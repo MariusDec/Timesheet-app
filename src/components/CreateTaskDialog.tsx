@@ -1,6 +1,8 @@
 import { createSignal, createEffect } from 'solid-js';
 import { db } from '../db/database';
 import type { Project } from '../db/models';
+import { normalizeTaskName } from '../utils/taskName';
+import { backdropClose } from '../utils/overlay';
 
 interface CreateTaskDialogProps {
   project: Project;
@@ -10,7 +12,7 @@ interface CreateTaskDialogProps {
 }
 
 export default function CreateTaskDialog(props: CreateTaskDialogProps) {
-  const [taskName, setTaskName] = createSignal(props.initialTaskName || '');
+  const [taskName, setTaskName] = createSignal(normalizeTaskName(props.initialTaskName || ''));
   const [error, setError] = createSignal('');
   let textareaRef: HTMLTextAreaElement | undefined;
 
@@ -19,10 +21,7 @@ export default function CreateTaskDialog(props: CreateTaskDialogProps) {
   });
 
   async function handleSave() {
-    const name = taskName()
-      .replace(/\n/g, ' ')
-      .replace(/\s{2,}/g, ' ')
-      .trim();
+    const name = normalizeTaskName(taskName());
     if (!name) {
       setError('Task name is required');
       return;
@@ -55,6 +54,25 @@ export default function CreateTaskDialog(props: CreateTaskDialogProps) {
     props.onTaskCreated(taskId);
   }
 
+  // Multi-line pastes (e.g. copied from an issue tracker) are turned into
+  // "KEY-123 - Title" right away so the user sees what will be saved.
+  function handlePaste(e: ClipboardEvent) {
+    const text = e.clipboardData?.getData('text/plain') ?? '';
+    if (!/[\r\n]/.test(text)) return;
+    e.preventDefault();
+    const el = e.currentTarget as HTMLTextAreaElement;
+    const replacesAll = el.selectionStart === 0 && el.selectionEnd === el.value.length;
+    const pasted = normalizeTaskName(text);
+    if (replacesAll || !el.value.trim()) {
+      el.value = pasted;
+    } else {
+      el.setRangeText(pasted, el.selectionStart, el.selectionEnd, 'end');
+    }
+    el.setSelectionRange(el.value.length, el.value.length);
+    setTaskName(el.value);
+    setError('');
+  }
+
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -66,8 +84,8 @@ export default function CreateTaskDialog(props: CreateTaskDialogProps) {
   }
 
   return (
-    <div class="dialog-overlay" onClick={props.onClose}>
-      <div class="dialog" onClick={(e) => e.stopPropagation()} onKeyDown={handleKeyDown}>
+    <div class="dialog-overlay" {...backdropClose(() => props.onClose())}>
+      <div class="dialog" onKeyDown={handleKeyDown}>
         <h3>Create New Task</h3>
         <p class="dialog-subtitle">Project: {props.project.name}</p>
         <textarea
@@ -75,6 +93,7 @@ export default function CreateTaskDialog(props: CreateTaskDialogProps) {
           class="dialog-input dialog-input-multiline"
           placeholder="Task name"
           value={taskName()}
+          onPaste={handlePaste}
           onInput={(e) => {
             setTaskName(e.currentTarget.value);
             setError('');

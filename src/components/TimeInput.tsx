@@ -11,6 +11,9 @@ export default function TimeInput(props: TimeInputProps) {
     const [displayValue, setDisplayValue] = createSignal('');
     const [editing, setEditing] = createSignal(false);
     let saveOnBlur = true;
+    // Set on focus so the mouseup/pointerup that follows a click or tap doesn't
+    // collapse the select-all we just made (which made the value hard to replace).
+    let keepSelection = false;
 
     createEffect(() => {
         if (!editing()) {
@@ -55,6 +58,19 @@ export default function TimeInput(props: TimeInputProps) {
         const inputElement = e.target as HTMLInputElement;
         if (inputElement) {
             inputElement.select();
+            keepSelection = true;
+            // Touch browsers place the caret after focus; re-select once that's done.
+            setTimeout(() => {
+                if (document.activeElement === inputElement && keepSelection) inputElement.select();
+                keepSelection = false;
+            }, 0);
+        }
+    }
+
+    function handlePointerUp(e: Event) {
+        if (keepSelection) {
+            e.preventDefault();
+            keepSelection = false;
         }
     }
 
@@ -75,10 +91,20 @@ export default function TimeInput(props: TimeInputProps) {
         }
     }
 
+    // While editing, grow to fit the whole value (it can overflow into the
+    // neighbouring cells); otherwise the full value is available as a tooltip.
+    const editWidth = () =>
+        editing() ? `calc(${Math.max(displayValue().length, 8)}ch + 24px)` : undefined;
+
     return (
+        <div class="time-input-wrap">
         <input
             class="time-input"
+            classList={{ 'time-input-editing': editing() }}
+            style={{ 'min-width': editWidth() }}
+            title={displayValue() || undefined}
             value={displayValue()}
+            onMouseUp={handlePointerUp}
             onInput={handleInput}
             onBlur={handleBlur}
             onFocus={handleFocus}
@@ -86,5 +112,6 @@ export default function TimeInput(props: TimeInputProps) {
             placeholder="—"
             autocomplete="off"
         />
+        </div>
     );
 }
