@@ -4,6 +4,7 @@ import { db } from '../db/database';
 import type { Project, Task } from '../db/models';
 import { normalizeTaskName } from '../utils/taskName';
 import { backdropClose } from '../utils/overlay';
+import { SearchIcon } from './Icons';
 
 interface ProjectTaskDropdownProps {
   buttonRect: DOMRect;
@@ -271,7 +272,7 @@ export default function ProjectTaskDropdown(props: ProjectTaskDropdownProps) {
         style={dropdownStyle()}
       >
         <div class="dropdown-search-wrapper">
-          <span class="dropdown-search-icon">🔍</span>
+          <span class="dropdown-search-icon"><SearchIcon size={14} /></span>
           <input
             ref={searchRef}
             class="dropdown-search"

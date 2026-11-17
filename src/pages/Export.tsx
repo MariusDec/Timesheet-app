@@ -14,6 +14,7 @@ import { db } from '../db/database';
 import type { TimeEntry } from '../db/models';
 import DateRangePicker from '../components/DateRangePicker';
 import { downloadFile } from '../utils/download';
+import { DownloadIcon } from '../components/Icons';
 
 interface ExportRow {
   date: string;
@@ -123,7 +124,7 @@ export default function Export() {
 
       <div class="export-controls">
         <button class="btn btn-primary export-btn" onClick={exportCSVData}>
-          &#x21E9; Export CSV
+          <DownloadIcon size={15} /> Export CSV
         </button>
       </div>
 

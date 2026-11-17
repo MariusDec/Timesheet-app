@@ -7,9 +7,9 @@ export default function App(props: { children?: any }) {
       <nav class="top-nav">
         <span class="nav-brand">Timesheet</span>
         <div class="nav-links-group">
-          <A class="nav-link" href="/" end>Timesheet</A>
-          <A class="nav-link" href="/export">Export</A>
-          <A class="nav-link" href="/settings">Settings</A>
+          <A class="nav-link" href="/" end data-label="Timesheet"><span>Timesheet</span></A>
+          <A class="nav-link" href="/export" data-label="Export"><span>Export</span></A>
+          <A class="nav-link" href="/settings" data-label="Settings"><span>Settings</span></A>
         </div>
         <span class="nav-spacer" />
         <ThemeToggle />

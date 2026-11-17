@@ -2,6 +2,7 @@ import { createSignal, For, Show, onMount } from 'solid-js';
 import { db } from '../db/database';
 import { execute } from '../db/sqlite';
 import { downloadFile } from '../utils/download';
+import { DownloadIcon, UploadIcon } from '../components/Icons';
 
 /** Normalize a timestamp to UTC midnight (strip time component) */
 function toUtcMidnight(ts: number): number {
@@ -167,8 +168,8 @@ export default function Settings() {
         <p class="settings-help">Back up your database to a JSON file and restore it on any browser.</p>
         <input type="file" accept=".json,application/json" ref={fileInput} style="display:none" onChange={handleFileSelect} />
         <div class="settings-io-row">
-          <button class="btn btn-primary" onClick={handleExport}>⬇ Export Backup</button>
-          <button class="btn btn-secondary" onClick={() => fileInput.click()}>⬆ Import Backup…</button>
+          <button class="btn btn-primary" onClick={handleExport}><DownloadIcon size={15} /> Export Backup</button>
+          <button class="btn btn-secondary" onClick={() => fileInput.click()}><UploadIcon size={15} /> Import Backup…</button>
         </div>
         {feedback() && <p class="settings-feedback">{feedback()}</p>}
       </section>

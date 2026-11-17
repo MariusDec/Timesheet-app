@@ -10,6 +10,7 @@ import {
   getMonthRange,
 } from '../utils/dateUtils';
 import type { DateRange } from '../utils/dateUtils';
+import { CalendarIcon } from './Icons';
 
 interface DateRangePickerProps {
   range: DateRange;
@@ -410,7 +411,7 @@ export default function DateRangePicker(props: DateRangePickerProps) {
       </button>
       <div class="week-label-wrap">
         <button class="date-range-picker-btn" onClick={handleToggle}>
-          <span class="date-range-picker-icon">&#x1F4C5;</span>
+          <span class="date-range-picker-icon"><CalendarIcon size={15} /></span>
           <span class="date-range-picker-label">{getRangeLabel()}</span>
         </button>
 

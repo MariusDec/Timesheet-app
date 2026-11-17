@@ -8,6 +8,7 @@ import {
   getSunday,
 } from '../utils/dateUtils';
 import Calendar from './Calendar';
+import { CalendarIcon } from './Icons';
 
 interface WeekNavigatorProps {
   currentDate: Date;
@@ -54,7 +55,8 @@ export default function WeekNavigator(props: WeekNavigatorProps) {
       </button>
       <div class="week-label-wrap">
         <button class="week-label-btn" onClick={handleClick}>
-          <span class="week-cal-icon">&#x1F4C5; {labelText()}</span>
+          <CalendarIcon size={15} />
+          <span class="week-cal-icon">{labelText()}</span>
         </button>
         {open() && (
           <div class="date-dropdown">

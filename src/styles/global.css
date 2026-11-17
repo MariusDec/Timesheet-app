@@ -140,14 +140,30 @@ textarea:focus-visible {
 }
 
 .nav-link {
+  /* The label and an invisible bold copy share one grid cell, so the pill is
+     always as wide as its bold (active) state and never jumps on click. */
+  display: inline-grid;
+  justify-items: center;
   color: var(--nav-link);
   text-decoration: none;
   padding: 6px 16px;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   white-space: nowrap;
+}
+
+.nav-link > span,
+.nav-link::after {
+  grid-area: 1 / 1;
+}
+
+.nav-link::after {
+  content: attr(data-label);
+  font-weight: 700;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .nav-link:hover {
@@ -178,7 +194,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   color: var(--text-secondary);
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   flex-shrink: 0;
 }
 
@@ -211,6 +227,16 @@ textarea:focus-visible {
 .page h1 {
   font-weight: 700;
   color: var(--text-primary);
+}
+
+/* Pages without a sticky toolbar: give the title the same breathing room. */
+.page > h1:first-child {
+  margin-bottom: 16px;
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
 }
 
 .page-toolbar,
@@ -257,13 +283,17 @@ textarea:focus-visible {
 
 /* ===== Buttons ===== */
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 8px 18px;
   border: 1px solid transparent;
   border-radius: 14px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
 }
 
 .btn-primary {
@@ -314,7 +344,7 @@ textarea:focus-visible {
   justify-content: center;
   font-size: 18px;
   color: var(--text-secondary);
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
 }
 
 .nav-arrow-btn:first-child {
@@ -345,15 +375,13 @@ textarea:focus-visible {
   background: var(--bg-secondary);
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
   height: 36px;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   white-space: nowrap;
   min-width: 230px;
-  text-align: center;
-  align-content: center;
-  align-self: center;
+  justify-content: center;
 }
 
 .week-label-btn:hover {
@@ -364,7 +392,11 @@ textarea:focus-visible {
 .week-cal-icon {
   font-size: 14px;
   line-height: 1;
-  width: 100%;
+}
+
+.week-label-btn .icon,
+.date-range-picker-icon {
+  color: var(--accent-text);
 }
 
 /* ===== Date Dropdown ===== */
@@ -443,7 +475,7 @@ textarea:focus-visible {
   border-radius: 0;
   font-size: 12px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s, transform 0.15s;
   color: var(--text-primary);
   height: 36px;
 }
@@ -505,7 +537,7 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s, transform 0.15s;
   color: var(--text-primary);
 }
 
@@ -559,7 +591,7 @@ textarea:focus-visible {
   cursor: pointer;
   font-size: 13px;
   border-radius: 10px;
-  transition: all 0.1s;
+  transition: background 0.1s, color 0.1s, border-color 0.1s, box-shadow 0.1s, opacity 0.1s, transform 0.1s;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -797,7 +829,7 @@ textarea:focus-visible {
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
   font-weight: 500;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s, transform 0.15s;
 }
 
 .time-input-wrap {
@@ -842,7 +874,7 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s, transform 0.15s;
 }
 
 .delete-btn:hover {
@@ -860,7 +892,7 @@ textarea:focus-visible {
   color: var(--accent-text);
   font-size: 13px;
   font-weight: 600;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s, transform 0.15s;
 }
 
 .select-project-row:hover {
@@ -890,7 +922,7 @@ textarea:focus-visible {
   border-radius: 14px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   width: 100%;
   display: flex;
   align-items: center;
@@ -941,9 +973,9 @@ textarea:focus-visible {
 }
 
 .dropdown-search-icon {
-  font-size: 13px;
+  display: flex;
   flex-shrink: 0;
-  line-height: 1;
+  color: var(--text-muted);
 }
 
 .dropdown-search {
@@ -1153,7 +1185,10 @@ textarea:focus-visible {
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 24px;
-  width: 360px;
+  /* Shrink-wraps its content so a horizontally resized textarea widens it. */
+  width: fit-content;
+  min-width: min(360px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
   box-shadow: var(--glass-shadow-lg);
 }
 
@@ -1187,8 +1222,14 @@ textarea:focus-visible {
 }
 
 .dialog-input-multiline {
+  /* 1.25x the previous 360px-wide dialog; resizable both ways. */
+  width: min(402px, calc(100vw - 80px));
+  height: 140px;
+  min-width: 240px;
+  max-width: calc(100vw - 80px);
   min-height: 80px;
-  resize: vertical;
+  max-height: calc(100vh - 220px);
+  resize: both;
   font-family: inherit;
   line-height: 1.5;
 }
@@ -1304,7 +1345,7 @@ textarea:focus-visible {
   border-radius: 999px;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   color: var(--text-primary);
 }
 
@@ -1334,7 +1375,7 @@ textarea:focus-visible {
   border-radius: 999px;
   font-size: 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   color: var(--text-primary);
 }
 
@@ -1353,8 +1394,7 @@ textarea:focus-visible {
   box-shadow: var(--accent-glow);
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1436,7 +1476,7 @@ textarea:focus-visible {
   font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.15s, transform 0.15s;
   white-space: nowrap;
   height: 36px;
   min-width: 230px;
@@ -1449,8 +1489,7 @@ textarea:focus-visible {
 }
 
 .date-range-picker-icon {
-  font-size: 14px;
-  line-height: 1;
+  display: flex;
 }
 
 .date-range-picker-label {
